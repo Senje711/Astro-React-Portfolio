@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
 
+/**
+ * @param {Object} props
+ * @param {string} props.title
+ * @param {string} props.description
+ * @param {string} [props.longDescription]
+ * @param {string[]} [props.tags]
+ * @param {string} [props.demoUrl]
+ * @param {string} [props.githubUrl]
+ * @param {string} [props.category]
+ * @param {string} [props.image]
+ */
 export default function ProjectCard({
   title,
   description,
