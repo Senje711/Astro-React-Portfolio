@@ -89,11 +89,10 @@ export default function GraphicDesignDeck() {
               <div
                 key={art.id}
                 style={{
-                  position: 'sticky',
-                  top: `${topOffset}px`,
+                  '--card-top': `${topOffset}px`,
                   zIndex: zIndex,
                 }}
-                className="group relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#0c110c] border border-gray-800 hover:border-lime-500/50 p-6 sm:p-8 md:p-10 transition-all duration-300 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                className="group relative lg:sticky lg:top-[var(--card-top)] rounded-[1.75rem] sm:rounded-[2.5rem] bg-[#0c110c] border border-gray-800 hover:border-lime-500/50 p-5 sm:p-8 md:p-10 transition-all duration-300 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
               >
                 {/* Subtle Ambient Card Glow */}
                 <div className="absolute -top-24 -right-24 w-72 h-72 bg-lime-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-lime-500/15 transition-all duration-500"></div>
@@ -191,7 +190,7 @@ export default function GraphicDesignDeck() {
           onClick={() => setSelectedImage(null)}
         >
           <div
-            className="relative max-w-5xl max-h-[90vh] bg-[#0c110c] border border-lime-500/30 rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col items-center overflow-hidden animate-scaleUp"
+            className="relative max-w-5xl max-h-[90vh] bg-[#0c110c] border border-lime-500/30 rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col items-center overflow-y-auto animate-scaleUp"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Bar */}

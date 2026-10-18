@@ -177,7 +177,7 @@ export default function Certifications() {
           onClick={() => setSelectedCert(null)}
         >
           <div
-            className="relative max-w-4xl max-h-[90vh] bg-[#0c110c] border border-lime-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col items-center overflow-hidden animate-scaleUp"
+            className="relative max-w-4xl max-h-[90vh] bg-[#0c110c] border border-lime-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col items-center overflow-y-auto animate-scaleUp"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}

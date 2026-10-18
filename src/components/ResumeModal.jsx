@@ -63,8 +63,8 @@ export default function ResumeModal() {
               </svg>
             </div>
             <div>
-              <h3 id="resume-modal-title" className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                Jesenhower A. Nachor
+              <h3 id="resume-modal-title" className="text-sm sm:text-lg font-bold text-white tracking-tight flex items-center gap-1.5 sm:gap-2">
+                <span className="hidden sm:inline">Jesenhower A. Nachor</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-lime-950/80 text-lime-400 border border-lime-500/30 font-medium">
                   RESUME / CV
                 </span>
@@ -76,30 +76,30 @@ export default function ResumeModal() {
           </div>
 
           {/* Top Controls & Close Button */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* View Mode Toggle */}
-            <div className="flex bg-gray-900 p-1 rounded-lg border border-gray-800 text-xs font-mono">
+            <div className="flex bg-gray-900 p-0.5 sm:p-1 rounded-lg border border-gray-800 text-[11px] sm:text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setActiveTab('document')}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
                   activeTab === 'document'
                     ? 'bg-lime-400 text-black font-semibold shadow-sm'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                Paper View
+                Paper
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('pdf')}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
                   activeTab === 'pdf'
                     ? 'bg-lime-400 text-black font-semibold shadow-sm'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                PDF View
+                PDF
               </button>
             </div>
 
@@ -107,10 +107,10 @@ export default function ResumeModal() {
             <button
               type="button"
               onClick={handleClose}
-              className="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-700 transition-all cursor-pointer"
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-700 transition-all cursor-pointer shrink-0"
               aria-label="Close modal"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -119,12 +119,12 @@ export default function ResumeModal() {
 
         {/* Modal Body (Smooth Hardware Accelerated Scrolling) */}
         <div
-          className="flex-1 overflow-y-auto overscroll-contain p-3 sm:p-6 bg-[#121612] min-h-[50vh] max-h-[calc(92vh-130px)]"
+          className="flex-1 overflow-y-auto overscroll-contain p-2 sm:p-6 bg-[#121612] min-h-[50vh] max-h-[calc(92vh-130px)]"
           style={{ WebkitOverflowScrolling: 'touch', willChange: 'scroll-position' }}
         >
           {activeTab === 'document' ? (
             /* Original White Paper Resume Document View */
-            <div className="max-w-3xl mx-auto bg-white text-gray-900 rounded-sm shadow-2xl p-6 sm:p-10 md:p-12 space-y-6 font-sans text-xs sm:text-sm leading-normal border border-gray-300">
+            <div className="max-w-3xl mx-auto bg-white text-gray-900 rounded-sm shadow-2xl p-4 sm:p-10 md:p-12 space-y-5 sm:space-y-6 font-sans text-xs sm:text-sm leading-normal border border-gray-300">
               
               {/* Name & Contact Header */}
               <div className="text-center border-b border-gray-300 pb-5 space-y-1.5">

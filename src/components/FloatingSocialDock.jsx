@@ -21,7 +21,7 @@ export default function FloatingSocialDock() {
 
   return (
     <div
-      className={`fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-[9980] flex flex-col gap-3 transition-all duration-500 ease-out ${
+      className={`fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-[9980] hidden lg:flex flex-col gap-3 transition-all duration-500 ease-out ${
         isVisible
           ? 'opacity-100 translate-x-0 pointer-events-auto'
           : 'opacity-0 translate-x-12 pointer-events-none'

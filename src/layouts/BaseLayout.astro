@@ -65,20 +65,22 @@ const {
     <div class="fixed bottom-0 left-1/3 w-[600px] h-[500px] bg-green-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
 
     <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
     <header class="sticky top-0 z-50 glass-nav">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          <a href="#home" class="flex items-center gap-2 group">
+          <a href="#home" class="flex items-center gap-2 group shrink-0">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-lime-400 via-emerald-500 to-teal-400 p-[1.5px] transition-transform duration-300 group-hover:scale-105">
               <div class="w-full h-full bg-[#050805] rounded-[10px] flex items-center justify-center font-bold text-sm text-lime-400">
                 JD
               </div>
             </div>
-            <span class="font-bold text-lg tracking-tight text-white group-hover:text-lime-400 transition-colors">
+            <span class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-lime-400 transition-colors">
               Jesen<span class="text-lime-400">.Dev</span>
             </span>
           </a>
 
+          <!-- Desktop Navigation -->
           <nav class="hidden md:flex items-center space-x-7 text-sm font-medium">
             <a href="#about" class="text-lime-400 hover:text-lime-300 transition-colors">About</a>
             <a href="#projects" class="text-gray-300 hover:text-lime-400 transition-colors">Projects</a>
@@ -87,11 +89,12 @@ const {
             <a href="#certifications" class="text-gray-300 hover:text-lime-400 transition-colors">Certifications</a>
           </nav>
 
+          <!-- Action Buttons & Mobile Hamburger Button -->
           <div class="flex items-center space-x-2 sm:space-x-3">
             <button
               type="button"
               onclick="window.dispatchEvent(new CustomEvent('open-resume-modal'))"
-              class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold tracking-wide text-lime-400 bg-lime-950/60 hover:bg-lime-400/20 border border-lime-500/40 hover:border-lime-400 rounded-lg transition-all duration-200 hover:scale-[1.02] cursor-pointer shadow-sm shadow-lime-500/10"
+              class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs font-semibold tracking-wide text-lime-400 bg-lime-950/60 hover:bg-lime-400/20 border border-lime-500/40 hover:border-lime-400 rounded-lg transition-all duration-200 hover:scale-[1.02] cursor-pointer shadow-sm shadow-lime-500/10"
               aria-label="Open Resume Modal"
             >
               <svg class="w-3.5 h-3.5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,16 +102,84 @@ const {
               </svg>
               <span>Resume</span>
             </button>
+
             <a
               href="#contact"
-              class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold tracking-wide text-gray-200 glass-panel border border-gray-700/80 hover:text-white hover:border-lime-400/50 hover:bg-gray-800/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+              class="inline-flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold tracking-wide text-gray-200 glass-panel border border-gray-700/80 hover:text-white hover:border-lime-400/50 hover:bg-gray-800/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
             >
-              Connect with Me
+              <span>Connect<span class="hidden sm:inline"> with Me</span></span>
             </a>
+
+            <!-- Mobile Hamburger Toggle Button -->
+            <button
+              id="mobile-nav-toggle"
+              type="button"
+              class="md:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Toggle navigation menu"
+              aria-expanded="false"
+            >
+              <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
+
+      <!-- Mobile Expandable Navigation Menu -->
+      <div id="mobile-nav-menu" class="hidden md:hidden border-t border-gray-800/80 bg-[#050805]/95 backdrop-blur-xl px-5 py-4 space-y-3 shadow-2xl transition-all">
+        <a href="#about" class="mobile-nav-item block text-sm font-medium text-gray-300 hover:text-lime-400 py-1 transition-colors">About</a>
+        <a href="#projects" class="mobile-nav-item block text-sm font-medium text-gray-300 hover:text-lime-400 py-1 transition-colors">Projects</a>
+        <a href="#design" class="mobile-nav-item block text-sm font-medium text-gray-300 hover:text-lime-400 py-1 transition-colors">Designs</a>
+        <a href="#skills" class="mobile-nav-item block text-sm font-medium text-gray-300 hover:text-lime-400 py-1 transition-colors">Skills</a>
+        <a href="#certifications" class="mobile-nav-item block text-sm font-medium text-gray-300 hover:text-lime-400 py-1 transition-colors">Certifications</a>
+      </div>
     </header>
+
+    <script>
+      function setupMobileNav() {
+        const toggleBtn = document.getElementById('mobile-nav-toggle');
+        const menu = document.getElementById('mobile-nav-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        if (!toggleBtn || !menu) return;
+
+        const toggleMenu = () => {
+          const isClosed = menu.classList.contains('hidden');
+          if (isClosed) {
+            menu.classList.remove('hidden');
+            hamburgerIcon?.classList.add('hidden');
+            closeIcon?.classList.remove('hidden');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          } else {
+            menu.classList.add('hidden');
+            hamburgerIcon?.classList.remove('hidden');
+            closeIcon?.classList.add('hidden');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+          }
+        };
+
+        toggleBtn.addEventListener('click', toggleMenu);
+
+        // Auto close when any link is clicked
+        const navItems = menu.querySelectorAll('.mobile-nav-item');
+        navItems.forEach((item) => {
+          item.addEventListener('click', () => {
+            menu.classList.add('hidden');
+            hamburgerIcon?.classList.remove('hidden');
+            closeIcon?.classList.add('hidden');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+
+      setupMobileNav();
+      document.addEventListener('astro:page-load', setupMobileNav);
+    </script>
 
     <!-- Main Content Container -->
     <main class="flex-grow relative z-10">

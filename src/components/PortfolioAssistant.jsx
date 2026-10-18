@@ -80,22 +80,22 @@ export default function PortfolioAssistant() {
   return (
     <>
       {/* Floating Trigger Button */}
-      <div className="fixed bottom-6 right-6 z-[9990]">
+      <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-[9990]">
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="relative w-14 h-14 rounded-full bg-gradient-to-br from-lime-400 via-emerald-500 to-teal-500 p-0.5 shadow-2xl shadow-lime-500/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer group"
+          className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-lime-400 via-emerald-500 to-teal-500 p-0.5 shadow-2xl shadow-lime-500/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer group"
           aria-label="Toggle Assistant Chatbot"
         >
           <div className="w-full h-full rounded-full bg-[#080d08] flex items-center justify-center relative">
             {isOpen ? (
-              <svg className="w-6 h-6 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
               <div className="relative flex items-center justify-center">
                 {/* Bot Icon */}
-                <svg className="w-7 h-7 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
                 {/* Pulsing Dot */}
@@ -111,7 +111,7 @@ export default function PortfolioAssistant() {
 
       {/* Chatbot Popup Container */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-[9999] w-[calc(100vw-32px)] sm:w-[380px] h-[520px] max-h-[80vh] bg-[#0c110c] border border-gray-800/90 rounded-3xl shadow-2xl shadow-lime-500/10 flex flex-col overflow-hidden animate-scaleUp">
+        <div className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-[9999] w-[calc(100vw-24px)] sm:w-[380px] h-[500px] max-h-[82vh] bg-[#0c110c] border border-gray-800/90 rounded-3xl shadow-2xl shadow-lime-500/10 flex flex-col overflow-hidden animate-scaleUp">
           
           {/* Header Bar */}
           <div className="flex items-center justify-between px-5 py-3.5 bg-[#070b07] border-b border-gray-800/80 shrink-0">
