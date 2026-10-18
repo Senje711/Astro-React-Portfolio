@@ -6,7 +6,7 @@ const certificates = [
     title: 'IT Specialist - Databases',
     issuer: 'Certiport, a Pearson VUE business',
     date: 'September 2026',
-    image: '/assets/certificates/pearson-databases.png',
+    image: '/assets/certificates/pearson-databases.webp',
     category: 'Industry Certification',
     credentialId: 'wBaeX-2FvB',
     credlyUrl: 'https://www.credly.com/earner/earned/badge/2e0e9a3c-cb53-4965-b35d-c4796afaebf8',
@@ -18,7 +18,7 @@ const certificates = [
     title: 'IT Specialist - HTML and CSS',
     issuer: 'Certiport, a Pearson VUE business',
     date: 'June 2026',
-    image: '/assets/certificates/pearson-html-css.png',
+    image: '/assets/certificates/pearson-html-css.webp',
     category: 'Industry Certification',
     credentialId: 'w96Mw-FaSY',
     credlyUrl: 'https://www.credly.com/earner/earned/badge/9bf319b3-1277-4959-85bc-e7f748cb6ea1',
@@ -30,7 +30,7 @@ const certificates = [
     title: 'Responsive Web Design',
     issuer: 'freeCodeCamp',
     date: 'June 2026',
-    image: '/assets/certificates/freecodecamp-responsive-web-design.png',
+    image: '/assets/certificates/freecodecamp-responsive-web-design.webp',
     category: 'Developer Certification',
     description: 'Developer Certification representing approximately 300 hours of coursework in modern responsive web design.',
   },
@@ -39,7 +39,7 @@ const certificates = [
     title: 'TechAll Day 3 - Full Stack Web & Database',
     issuer: 'JPCS NU-Dasmariñas Chapter',
     date: 'February 2025',
-    image: '/assets/certificates/jpcs-techall-day3.png',
+    image: '/assets/certificates/jpcs-techall-day3.webp',
     category: 'Certificate of Participation',
     description: 'Participation certificate for Full Stack Web Development and Database Integration workshop.',
   },
@@ -48,7 +48,7 @@ const certificates = [
     title: 'eGOVPh Super App Orientation',
     issuer: 'DICT Region IV-A',
     date: 'May 2024',
-    image: '/assets/certificates/egovph-orientation.png',
+    image: '/assets/certificates/egovph-orientation.webp',
     category: 'Certificate of Participation',
     description: 'Conducted by the Department of Information and Communications Technology Region IV-A at National University - Dasmariñas.',
   },
@@ -98,6 +98,8 @@ export default function Certifications() {
                 <img
                   src={cert.image}
                   alt={cert.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-2">

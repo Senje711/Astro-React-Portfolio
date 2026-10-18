@@ -12,7 +12,7 @@ const designArts = [
     tags: ['Adobe Photoshop', 'Photo Manipulation', 'Vintage Advertising', 'Branding'],
     description:
       'A nostalgic vintage-style advertisement poster for Papa Banana Catsup created in Adobe Photoshop. Features custom photo manipulation blending a cute Pikachu character, retro typography, authentic product bottle isolation, and classic 1950s Filipino radio broadcast references.',
-    image: '/assets/design/papa-banana-catsup.png',
+    image: '/assets/design/papa-banana-catsup.webp',
   },
   {
     id: '02',
@@ -25,7 +25,7 @@ const designArts = [
     tags: ['Adobe Photoshop', 'Photo Composition', 'Digital Art', 'Filipino Culture'],
     description:
       'A creative Filipino cultural poster composition combining paper-cutout portrait head manipulations with textured sari-sari store imagery in Adobe Photoshop. Integrates custom lighting, atmospheric smoke effects, and distressed paper texture overlays.',
-    image: '/assets/design/sari-sari-stories.jpg',
+    image: '/assets/design/sari-sari-stories.webp',
   },
   {
     id: '03',
@@ -38,7 +38,7 @@ const designArts = [
     tags: ['Adobe Photoshop', 'Typography Design', 'Visual Effects', 'Digital Art'],
     description:
       'An evocative visual poster combining custom warped 3D typography, chromatic blending, drop shadow depth, and dramatic mountain cross sunset photography engineered with Adobe Photoshop layer styles and blending tools.',
-    image: '/assets/design/beautiful-things-poster.png',
+    image: '/assets/design/beautiful-things-poster.webp',
   },
   {
     id: '04',
@@ -51,7 +51,7 @@ const designArts = [
     tags: ['Adobe Photoshop', 'Pixel Art', 'Character Design', 'Digital Illustration'],
     description:
       'A retro pixel art character illustration crafted grid-by-grid using Adobe Photoshop pixel pencil and symmetry tools, featuring clean outline geometry, precise highlight placement, and vibrant color shading.',
-    image: '/assets/design/pikachu-pixel-art.png',
+    image: '/assets/design/pikachu-pixel-art.webp',
   },
 ];
 
@@ -166,6 +166,8 @@ export default function GraphicDesignDeck() {
                       <img
                         src={art.image}
                         alt={art.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">

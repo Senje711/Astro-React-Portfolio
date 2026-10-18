@@ -22,6 +22,8 @@ export default function ProjectCard({
             <img 
               src={image} 
               alt={title} 
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" 
             />
           ) : (
@@ -123,7 +125,13 @@ export default function ProjectCard({
             {/* Banner Image */}
             {image && (
               <div className="rounded-2xl overflow-hidden h-44 sm:h-56 border border-white/10 shrink-0">
-                <img src={image} alt={title} className="w-full h-full object-cover object-top" />
+                <img 
+                  src={image} 
+                  alt={title} 
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-top" 
+                />
               </div>
             )}
 

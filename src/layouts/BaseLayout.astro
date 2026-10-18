@@ -27,11 +27,18 @@ const {
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#050805" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/seo/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/assets/seo/og-image.png" />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts & DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -43,14 +50,14 @@ const {
     <!-- Interactive 1-100% Preloader -->
     <Preloader client:load />
 
-    <!-- Site-wide Resume Modal Popup -->
-    <ResumeModal client:load />
+    <!-- Site-wide Resume Modal Popup (Hydrates on idle to improve initial TBT) -->
+    <ResumeModal client:idle />
 
-    <!-- Prompt-Injection-Proof Portfolio Assistant Chatbot -->
-    <PortfolioAssistant client:load />
+    <!-- Portfolio Assistant Chatbot (Hydrates on idle) -->
+    <PortfolioAssistant client:idle />
 
-    <!-- Vertical Floating Right-Side Social & Resume Dock (Scroll-Revealed) -->
-    <FloatingSocialDock client:load />
+    <!-- Vertical Floating Social & Resume Dock (Hydrates on idle) -->
+    <FloatingSocialDock client:idle />
 
     <!-- Background Ambient Lime/Emerald Glow Effects -->
     <div class="fixed top-0 left-0 w-[650px] h-[650px] bg-emerald-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
