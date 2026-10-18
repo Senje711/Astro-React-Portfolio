@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Prevent search engines and web scrapers from indexing raw resume documents directly
+Disallow: /assets/resume/

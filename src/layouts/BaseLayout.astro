@@ -1,0 +1,147 @@
+---
+import '../styles/global.css';
+import Preloader from '../components/Preloader.jsx';
+import ResumeModal from '../components/ResumeModal.jsx';
+import PortfolioAssistant from '../components/PortfolioAssistant.jsx';
+import FloatingSocialDock from '../components/FloatingSocialDock.jsx';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Jesen.Dev | Aspiring Software Engineer & Full-Stack Developer",
+  description = "Portfolio of Jesenhower Nachor — Aspiring Software Engineer merging technical expertise with aesthetics.",
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-[#050805] text-gray-100 min-h-screen flex flex-col antialiased selection:bg-lime-500 selection:text-black">
+    <!-- Interactive 1-100% Preloader -->
+    <Preloader client:load />
+
+    <!-- Site-wide Resume Modal Popup -->
+    <ResumeModal client:load />
+
+    <!-- Prompt-Injection-Proof Portfolio Assistant Chatbot -->
+    <PortfolioAssistant client:load />
+
+    <!-- Vertical Floating Right-Side Social & Resume Dock (Scroll-Revealed) -->
+    <FloatingSocialDock client:load />
+
+    <!-- Background Ambient Lime/Emerald Glow Effects -->
+    <div class="fixed top-0 left-0 w-[650px] h-[650px] bg-emerald-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
+    <div class="fixed top-1/2 right-0 w-[550px] h-[550px] bg-lime-500/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-0 left-1/3 w-[600px] h-[500px] bg-green-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-nav">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="#home" class="flex items-center gap-2 group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-lime-400 via-emerald-500 to-teal-400 p-[1.5px] transition-transform duration-300 group-hover:scale-105">
+              <div class="w-full h-full bg-[#050805] rounded-[10px] flex items-center justify-center font-bold text-sm text-lime-400">
+                JD
+              </div>
+            </div>
+            <span class="font-bold text-lg tracking-tight text-white group-hover:text-lime-400 transition-colors">
+              Jesen<span class="text-lime-400">.Dev</span>
+            </span>
+          </a>
+
+          <nav class="hidden md:flex items-center space-x-7 text-sm font-medium">
+            <a href="#about" class="text-lime-400 hover:text-lime-300 transition-colors">About</a>
+            <a href="#projects" class="text-gray-300 hover:text-lime-400 transition-colors">Projects</a>
+            <a href="#design" class="text-gray-300 hover:text-lime-400 transition-colors">Designs</a>
+            <a href="#skills" class="text-gray-300 hover:text-lime-400 transition-colors">Skills</a>
+            <a href="#certifications" class="text-gray-300 hover:text-lime-400 transition-colors">Certifications</a>
+          </nav>
+
+          <div class="flex items-center space-x-2 sm:space-x-3">
+            <button
+              type="button"
+              onclick="window.dispatchEvent(new CustomEvent('open-resume-modal'))"
+              class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold tracking-wide text-lime-400 bg-lime-950/60 hover:bg-lime-400/20 border border-lime-500/40 hover:border-lime-400 rounded-lg transition-all duration-200 hover:scale-[1.02] cursor-pointer shadow-sm shadow-lime-500/10"
+              aria-label="Open Resume Modal"
+            >
+              <svg class="w-3.5 h-3.5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Resume</span>
+            </button>
+            <a
+              href="#contact"
+              class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold tracking-wide text-gray-200 glass-panel border border-gray-700/80 hover:text-white hover:border-lime-400/50 hover:bg-gray-800/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+            >
+              Connect with Me
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow relative z-10">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-gray-800/60 bg-[#050805]/80 backdrop-blur-md py-12 mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-lg text-white">Jesen<span class="text-lime-400">.Dev</span></span>
+            <span class="text-gray-600">|</span>
+            <p class="text-xs text-gray-400">Merging technical expertise with creativity and aesthetics.</p>
+          </div>
+
+          <div class="flex items-center space-x-6 text-sm text-gray-400">
+            <a href="https://github.com/Senje711" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">
+              GitHub
+            </a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jesenhowernachor26@gmail.com" target="_blank" rel="noopener noreferrer" class="hover:text-lime-400 transition-colors">
+              Gmail
+            </a>
+            <a href="https://www.linkedin.com/in/jesenhower-nachor-5096b33aa/" target="_blank" rel="noopener noreferrer" class="hover:text-lime-400 transition-colors">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-800/40 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+          <p>© {new Date().getFullYear()} Jesen.Dev (Jesenhower Nachor). Built with Astro & React.</p>
+          <div class="flex items-center space-x-2">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-lime-500"></span>
+            </span>
+            <span class="text-gray-400">System Ready</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

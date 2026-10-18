@@ -1,0 +1,174 @@
+---
+// src/components/Hero.astro
+---
+
+<section id="home" class="relative min-h-[95vh] flex flex-col justify-between items-center pt-16 pb-12 overflow-hidden select-none">
+  <!-- Subtle Background Watermark Text -->
+  <div class="hero-watermark absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.035] z-0 overflow-hidden transition-transform duration-75 ease-out">
+    <span class="text-[22vw] font-extrabold font-sans tracking-tighter text-white uppercase whitespace-nowrap">
+      DEVELOPER
+    </span>
+  </div>
+
+  <!-- Ambient Glow Blobs -->
+  <div class="absolute -bottom-20 -left-20 w-[550px] h-[550px] bg-emerald-500/20 rounded-full blur-[160px] pointer-events-none z-0"></div>
+  <div class="absolute top-10 right-0 w-[500px] h-[500px] bg-lime-500/15 rounded-full blur-[160px] pointer-events-none z-0"></div>
+
+  <!-- Floating 3D Code Symbols framing the headline closely -->
+  <!-- Left Curly Brace { -->
+  <div class="hero-float-wrapper absolute top-[20%] left-[8%] sm:left-[14%] lg:left-[18%] pointer-events-none z-10 transition-transform duration-75 ease-out">
+    <div class="hero-float animate-float-1 text-gray-700/80 font-mono text-6xl sm:text-8xl lg:text-9xl font-black drop-shadow-2xl select-none">
+      &#123;
+    </div>
+  </div>
+
+  <!-- Right Slash / -->
+  <div class="hero-float-wrapper absolute top-[22%] right-[8%] sm:right-[14%] lg:right-[18%] pointer-events-none z-10 transition-transform duration-75 ease-out">
+    <div class="hero-float animate-float-2 text-gray-700/80 font-mono text-5xl sm:text-7xl lg:text-8xl font-black drop-shadow-2xl select-none">
+      /
+    </div>
+  </div>
+
+  <!-- Bottom Left Asterisk * -->
+  <div class="hero-float-wrapper absolute bottom-[26%] left-[10%] sm:left-[16%] lg:left-[20%] pointer-events-none z-10 transition-transform duration-75 ease-out">
+    <div class="hero-float animate-float-3 text-gray-700/80 font-mono text-5xl sm:text-7xl lg:text-8xl font-black drop-shadow-2xl select-none">
+      *
+    </div>
+  </div>
+
+  <!-- Bottom Right Greater-Than > -->
+  <div class="hero-float-wrapper absolute bottom-[24%] right-[10%] sm:right-[16%] lg:right-[20%] pointer-events-none z-10 transition-transform duration-75 ease-out">
+    <div class="hero-float animate-float-1 text-gray-700/80 font-mono text-6xl sm:text-8xl lg:text-9xl font-black drop-shadow-2xl select-none">
+      &gt;
+    </div>
+  </div>
+
+  <!-- Top Label -->
+  <div class="hero-top-tag relative z-20 pt-4 transition-transform duration-75 ease-out">
+    <span class="text-[11px] font-mono tracking-[0.3em] uppercase text-gray-400 bg-gray-900/60 px-3 py-1 rounded-full border border-gray-800/60 backdrop-blur-md">
+      4TH YEAR COLLEGE STUDENT
+    </span>
+  </div>
+
+  <!-- Main Center Content -->
+  <div class="relative z-20 max-w-4xl mx-auto px-4 text-center space-y-8 my-auto py-12">
+    
+    <!-- Big Headline -->
+    <div class="hero-title transition-transform duration-75 ease-out">
+      <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white leading-[1.08] font-sans">
+        Hi, I'm Jesenhower, an <br />
+        <span class="text-lime-400 font-extrabold drop-shadow-[0_0_25px_rgba(163,230,53,0.3)]">aspiring</span> Software engineer
+      </h1>
+    </div>
+
+    <!-- Subtitle -->
+    <div class="hero-subtitle transition-transform duration-75 ease-out">
+      <p class="font-mono text-xs sm:text-sm md:text-base text-gray-300 max-w-xl mx-auto leading-relaxed tracking-wide">
+        I bring value to web development projects by merging technical expertise with creativity and aesthetics.
+      </p>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+      <a
+        href="#projects"
+        class="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-black bg-lime-400 hover:bg-lime-300 shadow-lg shadow-lime-500/20 transition-all duration-200 hover:scale-[1.02]"
+      >
+        Explore Work
+      </a>
+      <a
+        href="#contact"
+        class="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-gray-200 glass-panel border border-gray-700/80 hover:text-white hover:border-lime-400/50 hover:bg-gray-800/80 transition-all duration-200 hover:scale-[1.02]"
+      >
+        Connect with Me
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Bottom Glowing Vertical Scroll Cue Line -->
+  <div class="hero-scroll-cue relative z-20 flex flex-col items-center gap-2 pt-6 transition-opacity duration-200">
+    <a href="#about" aria-label="Scroll to about" class="group flex flex-col items-center">
+      <div class="w-[2px] h-12 bg-gradient-to-b from-transparent via-lime-400 to-transparent group-hover:h-16 transition-all duration-300 rounded-full shadow-[0_0_10px_#a3e635]"></div>
+    </a>
+  </div>
+
+</section>
+
+<!-- Scroll Parallax & Zoom Transition Script -->
+<script>
+  function setupScrollParallax() {
+    const heroSection = document.getElementById('home');
+    if (!heroSection) return;
+
+    const heroTitle = heroSection.querySelector('.hero-title') as HTMLElement | null;
+    const heroSubtitle = heroSection.querySelector('.hero-subtitle') as HTMLElement | null;
+    const heroTopTag = heroSection.querySelector('.hero-top-tag') as HTMLElement | null;
+    const heroScrollCue = heroSection.querySelector('.hero-scroll-cue') as HTMLElement | null;
+    const floatWrappers = heroSection.querySelectorAll('.hero-float-wrapper');
+    const bgWatermark = heroSection.querySelector('.hero-watermark') as HTMLElement | null;
+
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const heroHeight = heroSection?.offsetHeight || 800;
+
+          if (scrollY <= heroHeight) {
+            const progress = scrollY / heroHeight;
+
+            // Parallax scale & fade out for main title
+            if (heroTitle) {
+              heroTitle.style.transform = `translateY(${progress * -50}px) scale(${1 + progress * 0.12})`;
+              heroTitle.style.opacity = `${Math.max(0, 1 - progress * 1.3)}`;
+            }
+
+            // Subtitle floats down and fades
+            if (heroSubtitle) {
+              heroSubtitle.style.transform = `translateY(${progress * 40}px)`;
+              heroSubtitle.style.opacity = `${Math.max(0, 1 - progress * 1.5)}`;
+            }
+
+            // Top tag floats up
+            if (heroTopTag) {
+              heroTopTag.style.transform = `translateY(${progress * -30}px)`;
+              heroTopTag.style.opacity = `${Math.max(0, 1 - progress * 2)}`;
+            }
+
+            // Scroll indicator line fades quickly on scroll
+            if (heroScrollCue) {
+              heroScrollCue.style.opacity = `${Math.max(0, 1 - progress * 3)}`;
+            }
+
+            // Watermark zoom effect
+            if (bgWatermark) {
+              bgWatermark.style.transform = `scale(${1 + progress * 0.35})`;
+              bgWatermark.style.opacity = `${0.035 * Math.max(0, 1 - progress * 1.2)}`;
+            }
+
+            // Floating code symbol wrappers 3D translate on scroll
+            floatWrappers.forEach((el, index) => {
+              const htmlEl = el as HTMLElement;
+              const direction = index % 2 === 0 ? 1 : -1;
+              const translateY = progress * -100 * (index + 1) * 0.35;
+              const translateX = progress * 45 * direction;
+              const scale = 1 + progress * 0.3;
+
+              htmlEl.style.transform = `translate3d(${translateX}px, ${translateY}px, 0px) scale(${scale})`;
+              htmlEl.style.opacity = `${Math.max(0, 1 - progress * 1.1)}`;
+            });
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  setupScrollParallax();
+  document.addEventListener('astro:page-load', setupScrollParallax);
+</script>

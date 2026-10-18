@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import ProjectCard from '../components/ProjectCard.jsx';
+import TechStack from '../components/TechStack.jsx';
+import GraphicDesignDeck from '../components/GraphicDesignDeck.jsx';
+import Certifications from '../components/Certifications.jsx';
+
+const projects = [
+  {
+    title: "SafeLink",
+    description: "Mobile and web application for family safety with real-time disaster alerts.",
+    longDescription: "Collaborated with a team to design and develop the UI for SafeLink, a comprehensive family safety platform. Worked on both web (React.js) and mobile (React Native) applications, ensuring consistent design patterns and user experience across platforms. Contributed to user interface design, component architecture, and comprehensive documentation for the project.",
+    tags: ["React.js", "React Native", "JavaScript"],
+    category: "UI/UX Designer & Documentation",
+    image: "/assets/projects/safelink.jpg",
+    demoUrl: "https://github.com/kidlatpogi/SafeLink",
+    githubUrl: "https://github.com/kidlatpogi/SafeLink"
+  },
+  {
+    title: "Room Reservation System",
+    description: "A web-based reservation system designed for managing classroom and laboratory bookings, featuring user-friendly administrative controls and real-time updates to ensure smooth and efficient scheduling.",
+    longDescription: "Designed and documented comprehensive data structure and schema for the Room Reservation System. Developed detailed documentation for database architecture, user workflows, and system specifications. Contributed to data modeling, API documentation, and user guide creation for efficient room booking management.",
+    tags: ["JavaScript", "SQL"],
+    category: "Data & Documentation",
+    image: "/assets/projects/room-reservation.jpg",
+    demoUrl: "https://github.com/kidlatpogi/Room-Reservation-System",
+    githubUrl: "https://github.com/kidlatpogi/Room-Reservation-System"
+  },
+  {
+    title: "MyPC Ecommerce Shop",
+    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. It simulates a real-world online store, allowing users to browse, select, and purchase computer components and accessories.",
+    longDescription: "Developed comprehensive documentation and data structure for MyPC e-commerce platform. Created detailed product database, user flow documentation, and system architecture guides for the Information Assurance and Security course project. Contributed to database design and user interface specifications.",
+    tags: ["JavaScript", "HTML", "CSS"],
+    category: "Documentation & Data",
+    image: "/assets/projects/mypc.jpg",
+    demoUrl: "https://github.com/kidlatpogi/InfoSec-MyPC",
+    githubUrl: "https://github.com/kidlatpogi/InfoSec-MyPC"
+  },
+  {
+    title: "Weather App",
+    description: "A React-based weather application that practices API integration and real-time data fetching.",
+    longDescription: "Developed a Weather App to practice React development and API integration. Implemented real-time weather data fetching from external APIs, developed responsive user interface, and demonstrated proficiency in handling asynchronous data and component state management.",
+    tags: ["React.js", "API"],
+    category: "Frontend Developer",
+    image: "/assets/projects/weather.jpg",
+    demoUrl: "https://github.com/Senje711/WeatherApp",
+    githubUrl: "https://github.com/Senje711/WeatherApp"
+  },
+  {
+    title: "Risky AI",
+    description: "A basic voice-interactive AI that processes spoken input and delivers corresponding responses through synthesized voice output.",
+    longDescription: "Developed Risky AI, a voice-interactive AI application that processes spoken input and generates synthesized voice responses. Implemented natural language processing and text-to-speech functionality, demonstrating proficiency in AI/ML integration and voice technology implementation.",
+    tags: ["Python"],
+    category: "Full Stack Developer",
+    image: "",
+    demoUrl: "https://github.com/Senje711/Risky_AI",
+    githubUrl: "https://github.com/Senje711/Risky_AI"
+  }
+];
+
+const skills = [
+  { category: "Frontend Architecture", items: ["Astro", "React 19", "Next.js", "TypeScript", "Tailwind CSS", "Vue.js"] },
+  { category: "Backend & Cloud", items: ["Node.js", "GraphQL", "PostgreSQL", "REST APIs", "Redis", "Docker"] },
+  { category: "Tools & DevOps", items: ["Git", "Vite", "CI/CD Pipelines", "Vercel", "Figma", "Jest / Vitest"] }
+];
+---
+
+<BaseLayout title="Jesenhower Nachor | Aspiring Software Engineer & Full-Stack Developer">
+  <!-- Hero Section -->
+  <Hero />
+
+  <!-- About Section -->
+  <About />
+
+  <!-- Featured Projects Section -->
+  <section id="projects" class="py-20 relative">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 border-b border-gray-800/80 pb-6">
+        <div>
+          <span class="text-xs font-mono font-semibold uppercase tracking-widest text-lime-400">PORTFOLIO SHOWCASE</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">
+            Featured <span class="text-lime-400">Projects</span>
+          </h2>
+        </div>
+        <p class="text-sm text-gray-400 max-w-md font-mono">
+          A selection of recent web applications and interactive React components crafted with care.
+        </p>
+      </div>
+
+      <!-- Project Grid Rendering React ProjectCards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {projects.map((project) => (
+          <ProjectCard
+            client:visible
+            title={project.title}
+            description={project.description}
+            longDescription={project.longDescription}
+            tags={project.tags}
+            category={project.category}
+            image={project.image}
+            demoUrl={project.demoUrl}
+            githubUrl={project.githubUrl}
+          />
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Multimedia & Graphic Design Showcase Section (Photoshop Works in Stacked Deck Format) -->
+  <GraphicDesignDeck client:visible />
+
+  <!-- Skills & Tech Stack Section -->
+  <section id="skills" class="py-16 relative bg-black/40 border-y border-gray-800/40 overflow-hidden">
+    <TechStack client:visible />
+  </section>
+
+  <!-- Certifications Section (Small Box Grid Layout) -->
+  <Certifications client:visible />
+
+  <!-- Contact CTA Banner -->
+  <section id="contact" class="py-20 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-gray-800 text-center space-y-6 relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 w-60 h-60 bg-lime-500/10 rounded-full blur-3xl"></div>
+
+        <span class="inline-block px-3 py-1 text-xs font-mono font-semibold text-lime-400 bg-lime-950/60 rounded-full border border-lime-500/30 uppercase tracking-wider">
+          LET'S COLLABORATE
+        </span>
+        
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Ready to bring your next web idea to life?
+        </h2>
+        
+        <p class="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-mono">
+          Whether you need an aspiring software engineer for a new product, UI refresh, or full-stack web engineering.
+        </p>
+
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=jesenhowernachor26@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto px-8 py-4 rounded-xl font-semibold text-sm text-black bg-lime-400 hover:bg-lime-300 shadow-xl shadow-lime-500/20 transition-all hover:scale-[1.02]"
+          >
+            jesenhowernachor26@gmail.com
+          </a>
+          <a
+            href="https://www.linkedin.com/in/jesenhower-nachor-5096b33aa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto px-8 py-4 rounded-xl font-semibold text-sm text-gray-200 glass-panel hover:text-white hover:bg-gray-800 transition-colors border border-gray-700"
+          >
+            Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
