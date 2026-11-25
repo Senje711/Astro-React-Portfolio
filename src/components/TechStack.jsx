@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const TECH_ITEMS = [
   {
@@ -188,6 +190,31 @@ const TECH_ITEMS = [
     )
   },
   {
+    id: 'claude-code',
+    name: 'Claude Code',
+    category: 'tools',
+    desc: 'Agentic AI coding assistant in the terminal & IDE for exploring codebases, building features, debugging & refactoring.',
+    color: '#D97757',
+    icon: (
+      <svg viewBox="0 0 100 100" className="w-11 h-11 sm:w-12 sm:h-12">
+        <g fill="#D97757" transform="translate(50 50)">
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg, i) => (
+            <rect
+              key={deg}
+              x="-4"
+              y={i % 2 ? -40 : -46}
+              width="8"
+              height={i % 2 ? 32 : 38}
+              rx="4"
+              transform={`rotate(${deg})`}
+            />
+          ))}
+          <circle r="10" />
+        </g>
+      </svg>
+    )
+  },
+  {
     id: 'vercel',
     name: 'Vercel',
     category: 'tools',
@@ -202,36 +229,205 @@ const TECH_ITEMS = [
   }
 ];
 
+const CATEGORIES = [
+  { id: 'all', label: 'All Technologies' },
+  { id: 'frontend', label: 'Frontend & Mobile' },
+  { id: 'backend', label: 'Backend & Database' },
+  { id: 'tools', label: 'Tools & AI' },
+];
+
+// Ring order: each category sits together so a filter can bring the whole group to the front.
+const CATEGORY_ORDER = ['frontend', 'backend', 'tools'];
+const RING = [...TECH_ITEMS].sort(
+  (a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category)
+);
+
+const TAU = Math.PI * 2;
+const FRONT = Math.PI / 2; // bottom of the ellipse = closest to the viewer
+
+/** Position/depth for a card at ring angle θ (percent units, so it also renders correctly server-side). */
+function place(theta) {
+  const depth = (Math.sin(theta) + 1) / 2; // 0 = back, 1 = front
+  return {
+    left: 50 + 40 * Math.cos(theta),
+    top: 50 + 30 * Math.sin(theta),
+    depth,
+    scale: 0.55 + 0.55 * depth,
+    tilt: Math.cos(theta) * 9,
+  };
+}
+
+function cardStyle(theta, dimmed) {
+  const p = place(theta);
+  return {
+    left: `${p.left}%`,
+    top: `${p.top}%`,
+    zIndex: Math.round(p.depth * 100),
+    opacity: (0.3 + 0.7 * p.depth) * (dimmed ? 0.2 : 1),
+    filter: `blur(${((1 - p.depth) * 3).toFixed(1)}px)${dimmed ? ' grayscale(1)' : ''}`,
+    transform: `translate(-50%, -50%) scale(${p.scale.toFixed(3)}) rotate(${p.tilt.toFixed(2)}deg)`,
+  };
+}
+
+const normalize = (a) => ((((a + Math.PI) % TAU) + TAU) % TAU) - Math.PI;
+
 export default function TechStack() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedTech, setSelectedTech] = useState(null);
 
-  const filteredItems = activeCategory === 'all' 
-    ? TECH_ITEMS 
-    : TECH_ITEMS.filter(item => item.category === activeCategory);
+  const stageRef = useRef(null);
+  const cardRefs = useRef([]);
+  const motion = useRef({ scroll: 0, offset: 0, current: 0, visible: false, paused: false, velocity: 0, dragging: false, dragged: false });
+  const dimRef = useRef(() => false);
+
+  const N = RING.length;
+  const step = TAU / N;
+  const isDimmed = (item) => activeCategory !== 'all' && item.category !== activeCategory;
+  dimRef.current = isDimmed;
+  motion.current.paused = !!selectedTech || activeCategory !== 'all';
+
+  const applyLayout = () => {
+    const angle = motion.current.current;
+    RING.forEach((item, i) => {
+      const el = cardRefs.current[i];
+      if (el) Object.assign(el.style, cardStyle(angle + i * step, dimRef.current(item)));
+    });
+  };
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const stage = stageRef.current;
+    if (!stage) return;
+    const m = motion.current;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Page scroll drives the wheel: one full turn while the section crosses the viewport.
+    const st = ScrollTrigger.create({
+      trigger: stage,
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: (self) => { m.scroll = self.progress * TAU; },
+    });
+
+    const io = new IntersectionObserver(([e]) => { m.visible = e.isIntersecting; });
+    io.observe(stage);
+
+    // Click-and-drag (mouse or touch) spins the wheel, with momentum on release.
+    const RAD_PER_PX = 0.006;
+    let startX = 0;
+    let lastX = 0;
+    let pointerId = null;
+    const onDown = (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      m.dragging = true;
+      m.dragged = false;
+      m.velocity = 0;
+      startX = lastX = e.clientX;
+      pointerId = e.pointerId;
+    };
+    const onMove = (e) => {
+      if (!m.dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - lastX;
+      lastX = e.clientX;
+      if (!m.dragged && Math.abs(e.clientX - startX) > 6) {
+        m.dragged = true;
+        stage.setPointerCapture(pointerId);
+        stage.classList.add('cursor-grabbing');
+      }
+      if (m.dragged) {
+        m.offset -= dx * RAD_PER_PX;
+        m.velocity = -dx * RAD_PER_PX;
+      }
+    };
+    const onUp = () => {
+      if (!m.dragging) return;
+      m.dragging = false;
+      stage.classList.remove('cursor-grabbing');
+      if (pointerId !== null && stage.hasPointerCapture(pointerId)) stage.releasePointerCapture(pointerId);
+      pointerId = null;
+    };
+    const noNativeDrag = (e) => e.preventDefault();
+    stage.addEventListener('pointerdown', onDown);
+    stage.addEventListener('pointermove', onMove);
+    stage.addEventListener('pointerup', onUp);
+    stage.addEventListener('pointercancel', onUp);
+    stage.addEventListener('dragstart', noNativeDrag);
+
+    let last = null;
+    const tick = () => {
+      if (!m.visible) return;
+      if (!m.dragging && Math.abs(m.velocity) > 0.00005) {
+        m.offset += m.velocity; // momentum after release
+        m.velocity *= 0.94;
+      }
+      if (!reduce && !m.paused && !m.dragging) m.offset += 0.0012; // gentle idle drift
+      const target = m.scroll + m.offset;
+      m.current += (target - m.current) * 0.08;
+      if (last !== null && Math.abs(m.current - last) < 0.00005) return;
+      last = m.current;
+      applyLayout();
+    };
+    gsap.ticker.add(tick);
+
+    return () => {
+      gsap.ticker.remove(tick);
+      stage.removeEventListener('pointerdown', onDown);
+      stage.removeEventListener('pointermove', onMove);
+      stage.removeEventListener('pointerup', onUp);
+      stage.removeEventListener('pointercancel', onUp);
+      stage.removeEventListener('dragstart', noNativeDrag);
+      st.kill();
+      io.disconnect();
+    };
+  }, [N, step]);
+
+  // Re-apply dimming immediately when the filter changes.
+  useEffect(applyLayout, [activeCategory]);
+
+  useEffect(() => {
+    if (!selectedTech) return;
+    const onKey = (e) => e.key === 'Escape' && setSelectedTech(null);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedTech]);
+
+  const filterBy = (id) => {
+    setActiveCategory(id);
+    setSelectedTech(null);
+    if (id === 'all') return;
+    // Spin so the middle of that category's arc lands at the front.
+    const idx = RING.reduce((acc, item, i) => (item.category === id ? [...acc, i] : acc), []);
+    const centre = (idx[0] + idx[idx.length - 1]) / 2;
+    const m = motion.current;
+    m.velocity = 0;
+    m.offset += normalize(FRONT - centre * step - (m.scroll + m.offset));
+  };
+
+  const select = (item, i) => {
+    // Spin the wheel so the clicked card lands at the front, then show its description.
+    const m = motion.current;
+    if (m.dragged) return; // that was a drag, not a click
+    const desired = FRONT - i * step;
+    m.offset += normalize(desired - (m.scroll + m.offset));
+    setSelectedTech(item);
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 select-none">
       {/* Section Heading */}
-      <div className="text-center space-y-3 mb-10">
+      <div className="text-center space-y-3 mb-4">
         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-          Tech Stack
+          <span className="text-lime-400">Tech</span> Stack
         </h2>
         <p className="text-gray-400 text-sm sm:text-base font-medium font-sans">
-          Tools I build with
+          Tools I build with — scroll or drag to spin, click to learn more
         </p>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-          {[
-            { id: 'all', label: 'All Technologies' },
-            { id: 'frontend', label: 'Frontend & Mobile' },
-            { id: 'backend', label: 'Backend & Database' },
-            { id: 'tools', label: 'Tools & AI' }
-          ].map(cat => (
+        <div className="relative z-[300] flex flex-wrap items-center justify-center gap-2 pt-4">
+          {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
+              onClick={() => filterBy(cat.id)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
                 activeCategory === cat.id
                   ? 'bg-lime-400 text-black shadow-lg shadow-lime-500/20 scale-105'
@@ -244,84 +440,90 @@ export default function TechStack() {
         </div>
       </div>
 
-      {/* Grid of Tech Cards (Matching reference screenshot styling) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
-        {filteredItems.map(item => (
-          <div
-            key={item.id}
-            onClick={() => setSelectedTech(item)}
-            className="group relative p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#0e1628]/80 via-[#0a0f1d]/70 to-[#070a14]/90 border border-slate-800/80 hover:border-blue-500/40 shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center justify-center gap-3.5 cursor-pointer overflow-hidden backdrop-blur-md"
-          >
-            {/* Top Glow on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      {/* Image wheel */}
+      <div ref={stageRef} className="relative h-[380px] sm:h-[480px] md:h-[600px] cursor-grab touch-pan-y">
+        <div className="absolute inset-0 -rotate-12 pointer-events-none">
+          {RING.map((item, i) => {
+            const selected = selectedTech?.id === item.id;
+            const glowing = activeCategory !== 'all' && item.category === activeCategory;
+            return (
+              <button
+                key={item.id}
+                ref={(el) => { cardRefs.current[i] = el; }}
+                onClick={() => select(item, i)}
+                aria-label={`${item.name} — show description`}
+                className="pointer-events-auto absolute w-24 h-32 sm:w-28 sm:h-36 md:w-36 md:h-44 rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col items-center justify-center gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.7)] border transition-[border-color,box-shadow] duration-300 hover:border-white/50"
+                style={{
+                  ...cardStyle(i * step, isDimmed(item)),
+                  background: `radial-gradient(circle at 30% 20%, ${item.color}66, ${item.color}1f 45%, #070a07 85%)`,
+                  borderColor: selected || glowing ? item.color : 'rgba(255,255,255,0.1)',
+                  boxShadow: glowing
+                    ? `0 0 24px ${item.color}cc, 0 0 70px ${item.color}66, inset 0 0 28px ${item.color}55`
+                    : selected
+                      ? `0 0 40px ${item.color}80`
+                      : undefined,
+                }}
+              >
+                {glowing && (
+                  <>
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 animate-pulse pointer-events-none"
+                      style={{ background: `radial-gradient(circle at 50% 40%, ${item.color}55, transparent 70%)` }}
+                    />
+                    <span aria-hidden="true" className="tech-shine absolute inset-0 pointer-events-none" />
+                  </>
+                )}
+                <span className="relative scale-110 md:scale-125 drop-shadow-[0_6px_16px_rgba(0,0,0,0.5)]">{item.icon}</span>
+                <span className="relative text-[10px] sm:text-xs font-semibold text-white/90 tracking-wide">{item.name}</span>
+              </button>
+            );
+          })}
+        </div>
 
-            {/* Brand Color Ambient Glow */}
-            <div 
-              className="absolute -inset-2 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"
-              style={{ backgroundColor: item.color }}
-            />
-
-            {/* Tech SVG Icon */}
-            <div className="relative z-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              {item.icon}
-            </div>
-
-            {/* Tech Name Label */}
-            <span className="relative z-10 text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white transition-colors text-center tracking-wide">
-              {item.name}
-            </span>
+        {/* Description: centre of the wheel on md+ */}
+        {selectedTech && (
+          <div className="hidden md:flex absolute inset-0 z-[200] items-center justify-center pointer-events-none">
+            <DetailCard key={selectedTech.id} tech={selectedTech} onClose={() => setSelectedTech(null)} />
           </div>
-        ))}
+        )}
       </div>
 
-      {/* Detail Modal */}
+      {/* Description: below the wheel on mobile */}
       {selectedTech && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn"
-          onClick={() => setSelectedTech(null)}
-        >
-          <div 
-            className="relative max-w-sm w-full bg-[#0a0f1d] border border-slate-700/80 rounded-2xl p-6 shadow-2xl space-y-4 text-center"
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedTech(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg font-bold w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
-            >
-              ✕
-            </button>
-
-            <div className="flex justify-center">
-              <div 
-                className="p-4 rounded-2xl bg-white/5 border border-white/10 shadow-inner"
-                style={{ boxShadow: `0 0 20px ${selectedTech.color}25` }}
-              >
-                {selectedTech.icon}
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-white tracking-wide">
-                {selectedTech.name}
-              </h3>
-              <span className="inline-block px-3 py-0.5 text-xs font-mono font-medium text-lime-400 bg-lime-950/60 rounded-full border border-lime-500/30 uppercase tracking-wider">
-                {selectedTech.category}
-              </span>
-            </div>
-
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-sans">
-              {selectedTech.desc}
-            </p>
-
-            <button
-              onClick={() => setSelectedTech(null)}
-              className="w-full py-2.5 rounded-xl font-semibold text-xs text-black bg-lime-400 hover:bg-lime-300 shadow-lg shadow-lime-500/20 transition-all cursor-pointer"
-            >
-              Close
-            </button>
-          </div>
+        <div className="md:hidden flex justify-center mt-2">
+          <DetailCard key={selectedTech.id} tech={selectedTech} onClose={() => setSelectedTech(null)} />
         </div>
       )}
+    </div>
+  );
+}
+
+function DetailCard({ tech, onClose }) {
+  return (
+    <div
+      className="pointer-events-auto relative w-full max-w-xs bg-[#0a0f0a]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl space-y-3 text-center animate-fadeIn"
+      style={{ boxShadow: `0 0 60px ${tech.color}30` }}
+      role="dialog"
+      aria-label={`${tech.name} description`}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close description"
+        className="absolute top-3 right-3 text-gray-400 hover:text-white text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+      >
+        ✕
+      </button>
+      <div className="flex items-center justify-center gap-3">
+        {tech.icon}
+        <div className="text-left">
+          <h3 className="text-lg font-bold text-white tracking-wide">{tech.name}</h3>
+          <span className="inline-block px-2.5 py-0.5 text-[10px] font-mono font-medium text-lime-400 bg-lime-950/60 rounded-full border border-lime-500/30 uppercase tracking-wider">
+            {tech.category}
+          </span>
+        </div>
+      </div>
+      <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">{tech.desc}</p>
     </div>
   );
 }

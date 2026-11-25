@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
   :root {
@@ -9,7 +9,17 @@
 
   html {
     scroll-behavior: smooth;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family:
+      'Plus Jakarta Sans',
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      sans-serif;
     background-color: var(--color-bg-dark);
     color: #f3f4f6;
   }
@@ -18,6 +28,11 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+}
+
+/* Lenis handles smooth scrolling once loaded; native smooth-behavior would fight it */
+html.lenis {
+  scroll-behavior: auto;
 }
 
 /* Custom Scrollbar */
@@ -58,7 +73,8 @@
 
 /* Floating Animations for 3D Code Tokens */
 @keyframes floatSlow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -67,7 +83,8 @@
 }
 
 @keyframes floatReverse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -114,4 +131,46 @@
 
 .animate-scaleUp {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.scramble-headline [data-scramble] {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: none;
+}
+
+.scramble-headline [data-scramble].text-lime-400 {
+  color: #a3e635;
+  text-shadow: 0 0 25px rgba(163, 230, 53, 0.3);
+}
+
+.scramble-headline [data-scramble] {
+  display: inline;
+  min-height: 1em;
+  white-space: normal;
+}
+
+.headline-role {
+  color: #ffffff;
+}
+
+/* Hide scrollbar on horizontal carousels while keeping them scrollable */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Light sweep across highlighted tech-stack tiles */
+.tech-shine {
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 48%, transparent 66%);
+  background-size: 250% 100%;
+  animation: tech-shine 2.6s ease-in-out infinite;
+}
+@keyframes tech-shine {
+  0% { background-position: 150% 0; }
+  60%, 100% { background-position: -100% 0; }
 }
