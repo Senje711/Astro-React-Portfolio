@@ -1,0 +1,43 @@
+---
+// src/components/SmoothScroll.astro
+// Site-wide inertial smooth scrolling (Lenis), synced with GSAP ScrollTrigger.
+---
+
+<script>
+  import Lenis from "lenis";
+  import "lenis/dist/lenis.css";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const lenis = new Lenis({
+    lerp: 0.09, // lower = smoother / floatier
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    // Touch devices keep native momentum scrolling
+    syncTouch: false,
+    // Let inner scroll areas (chat, modals) scroll normally
+    allowNestedScroll: true,
+    // Smooth-scroll in-page #links, offset for the sticky 64px header
+    anchors: { offset: -64 },
+    autoRaf: false,
+  });
+
+  // Drive Lenis from GSAP's ticker so pinned ScrollTrigger sections stay in sync
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // Pause smooth scrolling whenever a modal locks the page (body overflow: hidden)
+  const syncLock = () => {
+    if (document.body.style.overflow === "hidden") lenis.stop();
+    else lenis.start();
+  };
+  new MutationObserver(syncLock).observe(document.body, {
+    attributes: true,
+    attributeFilter: ["style"],
+  });
+
+  (window as any).__lenis = lenis;
+</script>

@@ -4,6 +4,8 @@ import Preloader from '../components/Preloader.jsx';
 import ResumeModal from '../components/ResumeModal.jsx';
 import PortfolioAssistant from '../components/PortfolioAssistant.jsx';
 import FloatingSocialDock from '../components/FloatingSocialDock.jsx';
+import SmoothScroll from '../components/SmoothScroll.astro';
+import BackToTop from '../components/BackToTop.astro';
 
 interface Props {
   title?: string;
@@ -58,6 +60,10 @@ const {
 
     <!-- Vertical Floating Social & Resume Dock (Hydrates on idle) -->
     <FloatingSocialDock client:idle />
+
+    <!-- Smooth inertial scrolling + Back-to-top button -->
+    <SmoothScroll />
+    <BackToTop />
 
     <!-- Background Ambient Lime/Emerald Glow Effects -->
     <div class="fixed top-0 left-0 w-[650px] h-[650px] bg-emerald-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>

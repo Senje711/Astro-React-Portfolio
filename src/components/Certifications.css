@@ -1,0 +1,200 @@
+.certifications-section {
+  position: relative;
+  padding: 4.5rem 0 5rem;
+  border-top: 1px solid rgba(31, 41, 55, 0.8);
+  background:
+    radial-gradient(ellipse at 50% 34%, rgba(37, 99, 235, 0.11), transparent 40%),
+    #050805;
+}
+
+.certifications-heading {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cert-folder-wrap {
+  position: relative;
+  min-height: 520px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  isolation: isolate;
+  margin: 20px auto 42px;
+  scrollbar-color: rgba(132, 204, 22, 0.72) rgba(31, 41, 55, 0.6);
+  scrollbar-width: thin;
+}
+
+.cert-folder-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cert-folder-wrap::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(31, 41, 55, 0.6);
+}
+
+.cert-folder-wrap::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(132, 204, 22, 0.72);
+}
+
+.cert-folder-track {
+  position: relative;
+  display: grid;
+  width: max(100%, 1060px);
+  min-height: 520px;
+  place-items: end center;
+}
+
+.certification-folder {
+  display: block;
+}
+
+.folder-cert-page {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  color: #111827;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.folder-cert-image-wrap {
+  display: flex;
+  min-height: 0;
+  flex: 0 0 52%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.folder-cert-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.folder-cert-details {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.folder-cert-category,
+.folder-cert-badge {
+  display: block;
+  overflow: hidden;
+  font: 700 11px/1.2 'Fira Code', monospace;
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.folder-cert-category {
+  color: #4d7c0f;
+}
+
+.folder-cert-badge {
+  color: #b45309;
+  font-size: 10px;
+}
+
+.folder-cert-title {
+  display: block;
+  max-height: 2.3em;
+  overflow: hidden;
+  color: #111827;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.folder-cert-issuer,
+.folder-cert-date {
+  display: block;
+  overflow: hidden;
+  color: #4b5563;
+  font: 500 12px/1.25 'Fira Code', monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-cert-date {
+  color: #6b7280;
+}
+
+.cert-folder-button {
+  position: absolute;
+  z-index: 100;
+  bottom: 100px;
+  left: 50%;
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 17px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f8fbff, #dbeafe);
+  box-shadow:
+    0 5px 16px rgba(18, 54, 117, 0.3),
+    inset 0 1px 0 #fff;
+  color: #15376e;
+  font: 700 13px/1 'Fira Code', monospace;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.cert-folder-button:hover {
+  box-shadow:
+    0 8px 20px rgba(18, 54, 117, 0.38),
+    inset 0 1px 0 #fff;
+  transform: translate(-50%, calc(-50% - 2px));
+}
+
+.cert-folder-button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+
+.cert-folder-hint {
+  position: absolute;
+  right: 0;
+  top: 12px;
+  left: 0;
+  margin: 0;
+  color: #9ca3af;
+  font: 12px/1.5 'Fira Code', monospace;
+  text-align: center;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .cert-folder-button {
+    min-height: 42px;
+    gap: 7px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-folder-button {
+    transition-duration: 0.01ms;
+  }
+}

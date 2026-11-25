@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
-import ProjectCard from '../components/ProjectCard.jsx';
+import FeaturedProjects from '../components/FeaturedProjects.jsx';
 import TechStack from '../components/TechStack.jsx';
 import GraphicDesignDeck from '../components/GraphicDesignDeck.jsx';
 import Certifications from '../components/Certifications.jsx';
@@ -74,42 +74,8 @@ const skills = [
   <!-- About Section -->
   <About />
 
-  <!-- Featured Projects Section -->
-  <section id="projects" class="py-20 relative">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 border-b border-gray-800/80 pb-6">
-        <div>
-          <span class="text-xs font-mono font-semibold uppercase tracking-widest text-lime-400">PORTFOLIO SHOWCASE</span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-            Featured <span class="text-lime-400">Projects</span>
-          </h2>
-        </div>
-        <p class="text-sm text-gray-400 max-w-md font-mono">
-          A selection of recent web applications and interactive React components crafted with care.
-        </p>
-      </div>
-
-      <!-- Project Grid Rendering React ProjectCards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {projects.map((project) => (
-          <ProjectCard
-            client:visible
-            title={project.title}
-            description={project.description}
-            longDescription={project.longDescription}
-            tags={project.tags}
-            category={project.category}
-            image={project.image}
-            demoUrl={project.demoUrl}
-            githubUrl={project.githubUrl}
-          />
-        ))}
-      </div>
-
-    </div>
-  </section>
+  <!-- Featured Projects Section (pinned horizontal scroll slider) -->
+  <FeaturedProjects client:visible={{ rootMargin: '600px' }} projects={projects} />
 
   <!-- Multimedia & Graphic Design Showcase Section (Photoshop Works in Stacked Deck Format) -->
   <GraphicDesignDeck client:visible />

@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const topicResponses = {
+// SECURITY NOTES
+// - Guided mode only: there is no free-text input, so visitors cannot inject prompts
+//   or arbitrary HTML. All replies come from this hard-coded, frozen allowlist.
+// - Messages are rendered as plain React text (auto-escaped). Never switch to
+//   dangerouslySetInnerHTML to render the **bold** markers.
+// - Clicks are rate-limited and the history is capped so spam-clicking can't
+//   freeze the tab or grow memory without bound.
+const CLICK_COOLDOWN_MS = 700;
+const MAX_MESSAGES = 40;
+const BOT_REPLY_DELAY_MS = 400;
+
+const topicResponses = Object.freeze({
   about: {
     question: 'About Jesenhower',
     text: "👋 Hi there! I'm **Jesenhower A. Nachor**, an aspiring Software Engineer & Full-Stack Developer currently pursuing BS Information Technology (Major in Mobile and Web Application) at National University - Dasmariñas. I'm a 3-Time Dean's Lister who loves merging technical performance with modern UI design!",
@@ -29,18 +40,30 @@ const topicResponses = {
     question: 'Get in Touch',
     text: "📬 **Let's Connect!**\n\n• **Gmail:** jesenhowernachor26@gmail.com\n• **LinkedIn:** linkedin.com/in/jesenhower-nachor\n• **GitHub:** github.com/Senje711\n\nFeel free to reach out for web engineering, full-stack projects, or collaboration opportunities!",
   },
-};
+});
+
+const isAllowedTopic = (key) =>
+  typeof key === 'string' && (key === 'resume' || Object.hasOwn(topicResponses, key));
+
+let nextMessageId = 1;
+const makeMessage = (sender, text) => ({ id: nextMessageId++, sender, text: String(text) });
+const capHistory = (list) => (list.length > MAX_MESSAGES ? list.slice(-MAX_MESSAGES) : list);
 
 export default function PortfolioAssistant() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      sender: 'bot',
-      text: 'Hello! Select any suggested topic below to learn more about Jesenhower.',
-    },
+  const [messages, setMessages] = useState(() => [
+    makeMessage('bot', 'Hello! Select any suggested topic below to learn more about Jesenhower.'),
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const lastClickRef = useRef(0);
+  const replyTimerRef = useRef(null);
+
+  // Cancel any pending bot reply when the component unmounts
+  useEffect(() => () => clearTimeout(replyTimerRef.current), []);
+
+  const addMessages = (...newMessages) =>
+    setMessages((prev) => capHistory([...prev, ...newMessages]));
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,30 +74,33 @@ export default function PortfolioAssistant() {
   }, [messages, isTyping]);
 
   const handleSelectTopic = (key) => {
-    if (isTyping) return;
+    if (isTyping || !isAllowedTopic(key)) return;
+
+    // Rate-limit: ignore rapid repeated clicks
+    const now = Date.now();
+    if (now - lastClickRef.current < CLICK_COOLDOWN_MS) return;
+    lastClickRef.current = now;
 
     if (key === 'resume') {
       window.dispatchEvent(new CustomEvent('open-resume-modal'));
-      setMessages((prev) => [
-        ...prev,
-        { sender: 'user', text: 'Open Resume' },
-        { sender: 'bot', text: '📄 Opening Jesenhower’s resume popup modal...' },
-      ]);
+      addMessages(
+        makeMessage('user', 'Open Resume'),
+        makeMessage('bot', '📄 Opening Jesenhower’s resume popup modal...'),
+      );
       return;
     }
 
     const topicData = topicResponses[key];
-    if (!topicData) return;
 
-    // Add User Question Message
-    setMessages((prev) => [...prev, { sender: 'user', text: topicData.question }]);
+    addMessages(makeMessage('user', topicData.question));
     setIsTyping(true);
 
     // Simulate Bot Response Delay
-    setTimeout(() => {
+    clearTimeout(replyTimerRef.current);
+    replyTimerRef.current = setTimeout(() => {
       setIsTyping(false);
-      setMessages((prev) => [...prev, { sender: 'bot', text: topicData.text }]);
-    }, 400);
+      addMessages(makeMessage('bot', topicData.text));
+    }, BOT_REPLY_DELAY_MS);
   };
 
   return (
@@ -147,10 +173,10 @@ export default function PortfolioAssistant() {
           </div>
 
           {/* Conversation Messages Viewport */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-[#090d09] text-xs font-sans">
-            {messages.map((msg, index) => (
+          <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-[#090d09] text-xs font-sans">
+            {messages.map((msg) => (
               <div
-                key={index}
+                key={msg.id}
                 className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'bot' && (
@@ -190,7 +216,7 @@ export default function PortfolioAssistant() {
             <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-gray-400 px-1 block">
               SUGGESTED TOPICS:
             </span>
-            <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
+            <div data-lenis-prevent className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
               <button
                 type="button"
                 onClick={() => handleSelectTopic('about')}
