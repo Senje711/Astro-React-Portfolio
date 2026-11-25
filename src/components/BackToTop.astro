@@ -74,13 +74,24 @@
     btn.dataset.ready = "1";
 
     let ticking = false;
+    let lastY = window.scrollY;
+    let scrollingUp = false;
+    const mobile = window.matchMedia("(max-width: 639px)");
+
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const y = window.scrollY;
+      if (Math.abs(y - lastY) > 6) {
+        scrollingUp = y < lastY;
+        lastY = y;
+      }
       const progress = max > 0 ? Math.min(1, y / max) : 0;
+      const atBottom = max > 0 && max - y < 120;
       ring.setAttribute("stroke-dashoffset", String(CIRC * (1 - progress)));
-      btn.classList.toggle("is-visible", y > 400);
-      btn.classList.toggle("at-bottom", max > 0 && max - y < 120);
+      // Phones: only show while scrolling up or at the bottom, so it doesn't cover content
+      const visible = y > 400 && (!mobile.matches || scrollingUp || atBottom);
+      btn.classList.toggle("is-visible", visible);
+      btn.classList.toggle("at-bottom", atBottom);
       ticking = false;
     };
 
