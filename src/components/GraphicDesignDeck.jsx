@@ -83,24 +83,26 @@ export default function GraphicDesignDeck() {
         <div className="relative space-y-12 pb-20">
           {designArts.map((art, index) => {
             const zIndex = (index + 1) * 10;
-            const topOffset = 100 + index * 18; // 100px, 118px, 136px, 154px top offset for stacked card header peeking
+            const topOffset = 100 + index * 18; // desktop: 100px, 118px, 136px, 154px top offset for stacked card header peeking
+            const topOffsetMobile = 76 + index * 14; // mobile: sits just under the 64px sticky nav
 
             return (
               <div
                 key={art.id}
                 style={{
                   '--card-top': `${topOffset}px`,
+                  '--card-top-m': `${topOffsetMobile}px`,
                   zIndex: zIndex,
                 }}
-                className="group relative lg:sticky lg:top-[var(--card-top)] rounded-[1.75rem] sm:rounded-[2.5rem] bg-[#0c110c] border border-gray-800 hover:border-lime-500/50 p-5 sm:p-8 md:p-10 transition-all duration-300 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                className="group sticky top-[var(--card-top-m)] lg:top-[var(--card-top)] rounded-[1.75rem] sm:rounded-[2.5rem] bg-[#0c110c] border border-gray-800 hover:border-lime-500/50 p-5 sm:p-8 md:p-10 transition-all duration-300 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
               >
                 {/* Subtle Ambient Card Glow */}
                 <div className="absolute -top-24 -right-24 w-72 h-72 bg-lime-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-lime-500/15 transition-all duration-500"></div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-center">
                   {/* Left Content Column */}
-                  <div className="lg:col-span-6 space-y-6 flex flex-col justify-between h-full">
-                    <div className="space-y-4">
+                  <div className="lg:col-span-6 space-y-3 sm:space-y-6 flex flex-col justify-between h-full">
+                    <div className="space-y-3 sm:space-y-4">
                       {/* Index Number Badge & Category */}
                       <div className="flex items-center justify-between text-xs font-mono">
                         <span className="text-gray-400 font-bold tracking-wider">{art.number}</span>
@@ -124,7 +126,7 @@ export default function GraphicDesignDeck() {
                       </div>
 
                       {/* Software & Skill Tag Pills */}
-                      <div className="flex flex-wrap gap-2 pt-1">
+                      <div className="hidden sm:flex flex-wrap gap-2 pt-1">
                         {art.tags.map((tag, tIdx) => (
                           <span
                             key={tIdx}
@@ -136,17 +138,17 @@ export default function GraphicDesignDeck() {
                       </div>
 
                       {/* Description */}
-                      <p className="text-sm text-gray-300 leading-relaxed font-sans pt-2">
+                      <p className="text-[13px] sm:text-sm text-gray-300 leading-relaxed font-sans sm:pt-2 line-clamp-3 sm:line-clamp-none">
                         {art.description}
                       </p>
                     </div>
 
                     {/* Action Button to Open Lightbox Zoom */}
-                    <div className="pt-4">
+                    <div className="pt-1 sm:pt-4">
                       <button
                         type="button"
                         onClick={() => setSelectedImage(art)}
-                        className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-mono font-bold text-black bg-lime-400 hover:bg-lime-300 shadow-lg shadow-lime-500/20 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full sm:w-auto px-6 py-2.5 sm:py-3 rounded-xl text-xs font-mono font-bold text-black bg-lime-400 hover:bg-lime-300 shadow-lg shadow-lime-500/20 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
@@ -160,7 +162,7 @@ export default function GraphicDesignDeck() {
                   <div className="lg:col-span-6 flex items-center justify-center">
                     <div
                       onClick={() => setSelectedImage(art)}
-                      className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden bg-black/60 border border-gray-800 group-hover:border-lime-500/40 transition-all duration-300 cursor-pointer shadow-xl flex items-center justify-center"
+                      className="relative w-full h-[clamp(10rem,30svh,15rem)] sm:h-80 md:h-96 rounded-2xl overflow-hidden bg-black/60 border border-gray-800 group-hover:border-lime-500/40 transition-all duration-300 cursor-pointer shadow-xl flex items-center justify-center"
                     >
                       <img
                         src={art.image}

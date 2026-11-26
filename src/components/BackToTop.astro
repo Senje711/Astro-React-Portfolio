@@ -9,7 +9,7 @@
   type="button"
   aria-label="Scroll back to top"
   title="Back to top"
-  class="back-to-top fixed z-[9985] bottom-[84px] right-[22px] sm:bottom-[92px] sm:right-[30px] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#080d08]/95 border border-gray-800 text-lime-400 shadow-2xl shadow-black/70 backdrop-blur-md flex items-center justify-center cursor-pointer hover:border-lime-500/60"
+  class="back-to-top fixed z-[9985] bottom-[84px] left-1/2 -translate-x-1/2 sm:bottom-[92px] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#080d08]/95 border border-gray-800 text-lime-400 shadow-2xl shadow-black/70 backdrop-blur-md flex items-center justify-center cursor-pointer hover:border-lime-500/60"
 >
   <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 44 44" aria-hidden="true">
     <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(163,230,53,0.12)" stroke-width="2"></circle>
@@ -74,13 +74,24 @@
     btn.dataset.ready = "1";
 
     let ticking = false;
+    let lastY = window.scrollY;
+    let scrollingUp = false;
+    const mobile = window.matchMedia("(max-width: 639px)");
+
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const y = window.scrollY;
+      if (Math.abs(y - lastY) > 6) {
+        scrollingUp = y < lastY;
+        lastY = y;
+      }
       const progress = max > 0 ? Math.min(1, y / max) : 0;
+      const atBottom = max > 0 && max - y < 120;
       ring.setAttribute("stroke-dashoffset", String(CIRC * (1 - progress)));
-      btn.classList.toggle("is-visible", y > 400);
-      btn.classList.toggle("at-bottom", max > 0 && max - y < 120);
+      // Phones: only show while scrolling up or at the bottom, so it doesn't cover content
+      const visible = y > 400 && (!mobile.matches || scrollingUp || atBottom);
+      btn.classList.toggle("is-visible", visible);
+      btn.classList.toggle("at-bottom", atBottom);
       ticking = false;
     };
 
